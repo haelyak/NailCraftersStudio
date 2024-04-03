@@ -1,16 +1,6 @@
-function initCanvas() {
-    // Create a new Fabric.js canvas instance
-    const canvas = new fabric.Canvas('canvas');
+var canvas = new fabric.Canvas('canvas');
+canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top: 100, left: 100 }));
 
-    // Example: Add a rectangle to the canvas
-    const rect = new fabric.Rect({
-        left: 100,
-        top: 100,
-        fill: 'red',
-        width: 200,
-        height: 100
-    });
-
-    // Add the rectangle to the canvas
-    canvas.add(rect);
-}
+canvas.selectionColor = 'rgba(0,255,0,0.3)';
+canvas.selectionBorderColor = 'red';
+canvas.selectionLineWidth = 5;
