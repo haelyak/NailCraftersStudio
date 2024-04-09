@@ -1,6 +1,29 @@
-var canvas = new fabric.Canvas('canvas');
-canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top: 100, left: 100 }));
+var fabric = require('fabric').fabric, // or import { fabric } from 'fabric';
+    http = require('http'),
+    url = require('url'),
+    PORT = 8124;
+var fs = require('fs');
 
-canvas.selectionColor = 'rgba(0,255,0,0.3)';
-canvas.selectionBorderColor = 'red';
-canvas.selectionLineWidth = 5;
+var server = http.createServer(function(request, response) {
+    var params = url.parse(request.url, true);
+    var canvas = new fabric.StaticCanvas(null, { width: 200, height: 200 });
+
+    response.writeHead(200, { 'Content-Type': 'image/png' });
+
+    const test = fs.readFileSync("objects.json");
+    var objs = JSON.parse(test);
+
+    canvas.loadFromJSON(objs, function() {
+        canvas.renderAll();
+
+        var stream = canvas.createPNGStream();
+        stream.on('data', function(chunk) {
+            response.write(chunk);
+        });
+        stream.on('end', function() {
+            response.end();
+        });
+    });
+});
+
+server.listen(PORT);
