@@ -6,11 +6,11 @@ class Canvas {
         this.startPoint = null;
         this.endPoint = null;
         this.pointMode = 'start';
-        this.mode = 'Line';
+        this.mode = 'Paint';
         this.handleDraw = this.handleDraw.bind(this);
         this.canvas.addEventListener('click', this.handleDraw);
         this.shapeMessages = [
-            { type: 'line', start: 'Select the starting point', end: 'Select the ending point' },
+            { type: 'brush', start: 'Drag your mouse to paint the nail', end: 'Select the ending point' },
             { type: 'rectangle', start: 'Select the first corner', end: 'Select the second corner' },
             { type: 'circle', start: 'Select the middle of the circle', end: 'Select the edge of the circle' }
         ];
@@ -21,15 +21,29 @@ class Canvas {
         this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
-        this.canvas.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
         // Array to store points for drawing freehand paths
         this.freehandPoints = [];
+        // Add an array to store separate paths for each stroke
+        this.freehandPaths = [];
+        // Add an array to store the color of each stroke
+        this.freehandColors = [];
+        // Add a variable to track the current drawing color
+        this.currentColor = '#000000';
+        this.lineWidth = 2; // Default line width
+        this.lineWidths = []; // Array to store line widths for each stroke
     }
 
     setColor(color) {
         this.activeColor = color;
         this.ctx.strokeStyle = color;
         this.ctx.fillStyle = color;
+    }
+
+    setLineWidth(width) {
+        // Update the line width
+        this.lineWidth = width;
+        // Update the line width of the canvas context
+        this.ctx.lineWidth = width;
     }
 
     setMode(mode) {
@@ -42,26 +56,12 @@ class Canvas {
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        if (this.pointMode == 'start') {
-            this.startPoint = [x, y];
-            this.pointMode = 'end';
-        } else if (this.pointMode == 'end') {
-            this.pointMode = 'start';
-            this.endPoint = [x, y];
-            // do the drawing
-            if (this.mode == 'Line') {
-                this.drawLine(this.startPoint, this.endPoint);
-            } else if (this.mode == 'Hollow Rectangle') {
-                this.drawHollowRectangle(this.startPoint, this.endPoint);
-            } else if (this.mode == 'Filled Rectangle') {
-                this.drawFilledRectangle(this.startPoint, this.endPoint);
-            } else if (this.mode == 'Hollow Circle') {
-                this.drawHollowCircle(this.startPoint, this.endPoint);
-            } else if (this.mode == 'Filled Circle') {
-                this.drawFilledCircle(this.startPoint, this.endPoint);
-            } else if (this.mode == 'Freehand') {
-                this.drawFreehand();
-            }
+        if (this.mode == 'Paint') {
+            this.drawFreehand();
+            this.setLineWidth(5);
+        } else if (this.mode == 'Detail') {
+            this.drawFreehand();
+            this.setLineWidth(1);
             this.socket.sendDraw(this.room, this.mode, this.activeColor, this.startPoint, this.endPoint);
             this.startPoint = null;
             this.endPoint = null;
@@ -73,17 +73,9 @@ class Canvas {
         const { mode, color, startPoint, endPoint } = msg;
         this.ctx.strokeStyle = color;
         this.ctx.fillStyle = color;
-        if (mode === 'Line') {
-            this.drawLine(startPoint, endPoint);
-        } else if (mode === 'Hollow Rectangle') {
-            this.drawHollowRectangle(startPoint, endPoint);
-        } else if (mode === 'Filled Rectangle') {
-            this.drawFilledRectangle(startPoint, endPoint);
-        } else if (mode === 'Hollow Circle') {
-            this.drawHollowCircle(startPoint, endPoint);
-        } else if (mode === 'Filled Circle') {
-            this.drawFilledCircle(startPoint, endPoint);
-        } else if (mode === 'Freehand') {
+        if (mode === 'Paint') {
+            this.drawFreehand();
+        } else if (mode === 'Detail') {
             this.drawFreehand();
         }
         this.ctx.strokeStyle = this.activeColor;
@@ -143,8 +135,9 @@ class Canvas {
     getModeType(mode) {
         let type = '';
         switch (mode) {
-            case 'Line':
-                type = 'line';
+            case 'Paint':
+            case 'Detail':
+                type = 'brush';
                 break;
             case 'Hollow Rectangle':
             case 'Filled Rectangle':
@@ -166,8 +159,14 @@ class Canvas {
     }
 
     clear() {
-        this.ctx.clearRect(0, 0, 500, 500);
-        this.drawImage();
+        // Clear the canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        // Clear the arrays storing paths, colors, and line widths
+        this.freehandPoints = [];
+        this.freehandPaths = [];
+        this.freehandColors = [];
+        this.lineWidths = [];
+        // Notify the server to clear the canvas for other users
         this.socket.sendClear();
     }
 
@@ -214,9 +213,34 @@ class Canvas {
         img.src = "nail.png"
     }
 
+    setColor(color) {
+        // Update the current drawing color
+        this.currentColor = color;
+    }
+
+    setLineWidth(width) {
+        // Update the line width
+        this.lineWidth = width;
+        // Update the line width of the canvas context
+        this.ctx.lineWidth = width;
+    }
+
+    addPoint(x, y) {
+        // Add the current mouse position to the current path
+        const rect = this.canvas.getBoundingClientRect();
+        this.currentPath.push({ x: x - rect.left, y: y - rect.top });
+    }
+
     handleMouseDown(e) {
         // Start capturing points when the mouse button is pressed
+        // Create a new path for the current stroke
         this.isDrawing = true;
+        this.currentPath = [];
+        // Store the current line width for this stroke
+        this.currentLineWidth = this.lineWidth;
+        this.lineWidths.push(this.currentLineWidth);
+        // Record the color for the new stroke
+        this.freehandColors.push(this.currentColor);
         this.addPoint(e.clientX, e.clientY);
     }
 
@@ -231,37 +255,39 @@ class Canvas {
     handleMouseUp() {
         // Stop capturing points when the mouse button is released
         this.isDrawing = false;
-    }
-
-    handleMouseLeave() {
-        // If the mouse leaves the canvas while drawing, stop capturing points
-        if (this.isDrawing) {
-            this.isDrawing = false;
+        // Add the completed path to the array of paths
+        if (this.currentPath.length > 0) {
+            this.freehandPaths.push(this.currentPath);
         }
-    }
-
-    addPoint(x, y) {
-        // Add the current mouse position to the array of points
-        const rect = this.canvas.getBoundingClientRect();
-        this.freehandPoints.push({ x: x - rect.left, y: y - rect.top });
     }
 
     drawFreehand() {
-        // Draw the freehand path using the stored points
+        // Your existing drawFreehand code here
         const ctx = this.ctx;
-        ctx.beginPath();
-        ctx.moveTo(this.freehandPoints[0].x, this.freehandPoints[0].y);
-        for (let i = 1; i < this.freehandPoints.length; i++) {
-            ctx.lineTo(this.freehandPoints[i].x, this.freehandPoints[i].y);
+        ctx.lineWidth = this.currentLineWidth; // Set the line width for this stroke
+        // Draw the stroke with the current line width
+        for (let i = 0; i < this.freehandPaths.length; i++) {
+            ctx.beginPath();
+            ctx.strokeStyle = this.freehandColors[i]; // Set the stroke color
+            ctx.moveTo(this.freehandPaths[i][0].x, this.freehandPaths[i][0].y);
+            for (let j = 1; j < this.freehandPaths[i].length; j++) {
+                ctx.lineTo(this.freehandPaths[i][j].x, this.freehandPaths[i][j].y);
+            }
+            ctx.stroke();
         }
-        ctx.stroke();
+        // Draw the current path being drawn
+        ctx.strokeStyle = this.currentColor; // Set the stroke color for the current path
+        ctx.beginPath();
+        const currentPath = this.currentPath;
+        if (currentPath.length > 0) {
+            ctx.moveTo(currentPath[0].x, currentPath[0].y);
+            for (let i = 1; i < currentPath.length; i++) {
+                ctx.lineTo(currentPath[i].x, currentPath[i].y);
+            }
+            ctx.stroke();
+        }
     }
 
-    clearFreehand() {
-        // Clear the array of points and the canvas
-        this.freehandPoints = [];
-        this.clear();
-    }
 }
 
 class Palette {
