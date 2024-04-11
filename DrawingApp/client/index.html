@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Collaborative Drawing App</title>
+    <title>NailCrafters Studio </title>
     <style type="text/css">
         canvas {
             border: 1px solid black;
@@ -18,9 +18,12 @@
 </head>
 
 <body>
-    <h1>Basic Collaborative Drawing App</h1>
+    <h1>NailCrafters Studio</h1>
     <div>
-        <canvas id="canvas" height="500px" width="500px"></canvas><br /></div>
+        <canvas id="canvas" height="500" width="500"></canvas><br />
+        <b>Mode:</b> <span id="mode"></span><br />
+        <b>Message:</b> <span id="message"></span>
+    </div>
     <div id="palette">
         <div id="row-1">
             <div class="palette"></div>
@@ -47,12 +50,29 @@
             <div class="palette"></div>
         </div>
     </div>
+    <div id="draw-methods">
+        <button onclick="canvas.setMode('Freehand')">Freehand</button>
+        <button onclick="canvas.setMode('Hollow Rectangle')">Hollow Rectangle</button>
+        <button onclick="canvas.setMode('Filled Rectangle')">Filled Rectangle</button>
+        <button onclick="canvas.setMode('Hollow Circle')">Hollow Circle</button>
+        <button onclick="canvas.setMode('Filled Circle')">Filled Circle</button>
 
+    </div>
+    <div>
+        <button onclick="canvas.clear()">Clear</button>
+        <button onclick="canvas.download()">Download</Button>
+        <button onclick="canvas.save()">Save</button>
+
+    </div>
     <script type="text/javascript" src="./script.js"></script>
     <script type="text/javascript">
-        const canvas = new Canvas();
+        const room = new Room();
+        const socket = new Socket(room);
+        const canvas = new Canvas(socket, room);
+        socket.setCanvas(canvas);
         const palette = new Palette();
-        palette.draw();
+        palette.draw(canvas);
+        canvas.drawImage();
     </script>
 </body>
 
