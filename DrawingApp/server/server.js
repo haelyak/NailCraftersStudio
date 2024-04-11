@@ -9,8 +9,6 @@ const { WebSocketServer } = require('ws');
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname + '/../client')));
 
-
-
 app.get('/script.js', (req, res) => {
     res.sendFile(path.join(__dirname + '/../client/script.js'));
 });
