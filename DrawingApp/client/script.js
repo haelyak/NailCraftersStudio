@@ -166,6 +166,8 @@ class Canvas {
         this.freehandPaths = [];
         this.freehandColors = [];
         this.lineWidths = [];
+        this.drawImage();
+
         // Notify the server to clear the canvas for other users
         this.socket.sendClear();
     }
