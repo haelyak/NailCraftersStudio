@@ -6,8 +6,23 @@
 
 <body>
     <h1>NailCrafters Studio</h1>
-    <div>
-        <canvas id="canvas" height="500" width="5000"></canvas><br />
+    <!-- Create the container of the tool -->
+    <div id="hand-div">
+        <!-- 
+        Initially, the image will have the background tshirt that has transparency
+        So we can simply update the color with CSS or JavaScript dinamically
+    -->
+        <img id="hand-backgroundpicture" src="DrawingApp\client\hand.jpg" />
+
+        <!-- 
+        The container where Fabric.js will work. Notice that in the the style of #canvas
+        the width and height need to match with the attributes
+    -->
+        <div id="drawingArea" class="drawing-area">
+            <div class="canvas-container">
+                <canvas id="canvas" width="500" height="5000"></canvas>
+            </div>
+        </div>
     </div>
     <div style="display: inline-block; margin-left: 10px">
         <button id="drawing-mode" class="btn btn-info">Cancel drawing mode</button><br>
