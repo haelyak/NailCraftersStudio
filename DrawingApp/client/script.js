@@ -2,8 +2,11 @@
     var $ = function(id) { return document.getElementById(id) };
 
     var canvas = this.__canvas = new fabric.Canvas('canvas', {
-        isDrawingMode: true
+        isDrawingMode: true,
+        backgroundImage: "https://i.pinimg.com/736x/97/f5/98/97f598a33ebd734731cd92c1ba778d2c.jpg",
     });
+
+
 
     fabric.Object.prototype.transparentCorners = false;
 
