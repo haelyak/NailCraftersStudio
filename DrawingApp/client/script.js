@@ -2,10 +2,9 @@
     var $ = function(id) { return document.getElementById(id) };
 
     var canvas = this.__canvas = new fabric.Canvas('canvas', {
-        isDrawingMode: true,
-        // backgroundImage: "https://i.pinimg.com/736x/97/f5/98/97f598a33ebd734731cd92c1ba778d2c.jpg",
+        isDrawingMode: true
+            // backgroundImage: "https://i.pinimg.com/736x/97/f5/98/97f598a33ebd734731cd92c1ba778d2c.jpg",
     });
-
 
 
     fabric.Object.prototype.transparentCorners = false;
@@ -187,13 +186,7 @@
             color: drawingShadowColorEl.value,
         });
     }
-    /**
-     * Method that adds an image to the T-Shirt canvas from a web URL.
-     * 
-     * @param {String} imageUrl      The server URL of the image that you want to load on the T-Shirt.
-     *
-     * @return {void} Return value description.
-     */
+
     function updateNailImage(imageURL) {
         fabric.Image.fromURL(imageURL, function(img) {
             img.scaleToHeight(300);
@@ -253,4 +246,4 @@
             canvas.remove(canvas.getActiveObject());
         }
     }, false);
-});
+})();
