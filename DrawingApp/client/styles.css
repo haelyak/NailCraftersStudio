@@ -14,7 +14,7 @@
     user-select: none;
 }
 
-#tshirt-div {
+#nail-div {
     width: 452px;
     height: 548px;
     position: relative;
@@ -23,7 +23,7 @@
 
 #canvas {
     position: absolute;
-    width: 200px;
+    width: 150px;
     height: 400px;
     left: 0px;
     top: 0px;
