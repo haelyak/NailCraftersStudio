@@ -247,3 +247,87 @@
         }
     }, false);
 })();
+
+(function() {
+    var canvas = this.__canvas = new fabric.Canvas('canvas', {
+        hoverCursor: 'pointer',
+        selection: false,
+        targetFindTolerance: 2
+    });
+
+    canvas.on({
+        'object:moving': function(e) {
+            e.target.opacity = 0.5;
+        },
+        'object:modified': function(e) {
+            e.target.opacity = 1;
+        }
+    });
+
+    for (var i = 0, len = 15; i < len; i++) {
+        fabric.Image.fromURL('http://fabricjs.com/per-pixel-drag-drop/assets/ladybug.png', function(img) {
+            img.set({
+                left: fabric.util.getRandomInt(0, 600),
+                top: fabric.util.getRandomInt(0, 500),
+                angle: fabric.util.getRandomInt(0, 90)
+            });
+
+            img.perPixelTargetFind = true;
+            img.hasControls = img.hasBorders = false;
+
+            img.scale(fabric.util.getRandomInt(50, 100) / 100);
+
+            canvas.add(img);
+        });
+    }
+})();
+
+// Update the TShirt color according to the selected color by the user
+document.getElementById("tshirt-color").addEventListener("change", function() {
+    document.getElementById("tshirt-div").style.backgroundColor = this.value;
+}, false);
+
+// Update the TShirt color according to the selected color by the user
+document.getElementById("tshirt-design").addEventListener("change", function() {
+
+    // Call the updateTshirtImage method providing as first argument the URL
+    // of the image provided by the select
+    updateTshirtImage(this.value);
+}, false);
+
+// When the user clicks on upload a custom picture
+document.getElementById('tshirt-custompicture').addEventListener("change", function(e) {
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+        var imgObj = new Image();
+        imgObj.src = event.target.result;
+
+        // When the picture loads, create the image in Fabric.js
+        imgObj.onload = function() {
+            var img = new fabric.Image(imgObj);
+
+            img.scaleToHeight(300);
+            img.scaleToWidth(300);
+            canvas.centerObject(img);
+            canvas.add(img);
+            canvas.renderAll();
+        };
+    };
+
+    // If the user selected a picture, load it
+    if (e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+    }
+}, false);
+
+// When the user selects a picture that has been added and press the DEL key
+// The object will be removed !
+document.addEventListener("keydown", function(e) {
+    var keyCode = e.keyCode;
+
+    if (keyCode == 46) {
+        console.log("Removing selected element on Fabric.js on DELETE key !");
+        canvas.remove(canvas.getActiveObject());
+    }
+}, false);
