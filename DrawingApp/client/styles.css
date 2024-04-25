@@ -1,38 +1,73 @@
-.drawing-area {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 10;
-    width: 512px;
-    height: 512px;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    /* Set a background color */
 }
 
-
-/* .canvas-container {
-    width: 20px;
-    height: 40px;
-    position: relative;
-    user-select: none;
-} */
+h1 {
+    text-align: center;
+    height: 50px;
+}
 
 #nail-div {
+    position: relative;
     width: 512px;
     height: 512px;
-    position: relative;
-    z-index: 5;
-    border-color: #f6050500;
-    border-width: 10px;
-    border-style: solid;
-    background-color: #ffffff;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
 }
 
-
-/* #canvas {
+#drawingArea {
+    width: calc(100% - 38px);
+    /* Subtract twice the border width and padding from the width */
+    height: calc(100% - 38px);
+    /* Subtract twice the border width and padding from the height */
     position: absolute;
-    width: 150px;
-    height: 400px;
-    left: 0px;
-    top: 0px;
-    user-select: none;
-    cursor: default;
-} */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#nail-backgroundpicture {
+    width: 512px;
+    height: 512px;
+    position: absolute;
+    top: 80%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+}
+
+.canvas-container {
+    margin-bottom: 10px;
+}
+
+canvas {
+    width: 100%;
+    /* Make the canvas take the full width of its container */
+    height: 100%;
+    /* Make the canvas take the full height of its container */
+    border: 1px solid #000;
+}
+
+.btn {
+    display: block;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.info {
+    margin-right: 5px;
+}
