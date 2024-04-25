@@ -6,15 +6,14 @@
 </head>
 
 <body>
-
     <h1>NailCrafters Studio</h1>
     <div id="nail-div">
         <img id="nail-backgroundpicture" src="./nail.png" />
         <div id="drawingArea" class="drawing-area">
             <div class="canvas-container">
-                <canvas id="canvas" height="500" width="500"></canvas><br />
+                <canvas id="canvas" height="512" width="512"></canvas><br />
             </div>
-            <div style="display: inline-block; margin-left: 10px">
+            <div style="display: inline-block; margin-left: 10px; width: 500px">
                 <button id="drawing-mode" class="btn btn-info">Cancel drawing mode</button><br>
                 <button id="clear-canvas" class="btn btn-info">Clear</button><br>
 
@@ -49,12 +48,13 @@
                     <span class="info">0</span><input type="range" value="0" min="0" max="50" id="drawing-shadow-offset"><br>
                 </div>
             </div>
+            <input type="file" id="imgLoader" accept="image/*">
+
         </div>
     </div>
+
     <script type="text/javascript" src="./fabric.min.js"></script>
     <script type="text/javascript" src="./script.js"></script>
 </body>
-
-</html>
 
 </html>
