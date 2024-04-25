@@ -20,7 +20,10 @@
     height: 512px;
     position: relative;
     z-index: 5;
-    background-color: #fff;
+    border-color: #f6050500;
+    border-width: 10px;
+    border-style: solid;
+    background-color: #ffffff;
 }
 
 

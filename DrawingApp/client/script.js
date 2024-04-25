@@ -7,31 +7,37 @@
     });
     canvas.controlsAboveOverlay = true;
     // var clip = new fabric.Path('M 162.824 27 L 337.176 27 C 349.359 27 359.25 36.891 359.25 49.074 L 359.25 450.926 C 359.25 463.109 349.359 473 337.176 473 L 162.824 473 C 150.641 473 140.75 463.109 140.75 450.926 L 140.75 49.074 C 140.75 36.891 150.641 27 162.824 27 Z  M 190.041 66 C 200.046 66 208.168 74.206 208.168 84.312 L 208.168 141.688 C 208.168 151.794 200.046 160 190.041 160 C 180.037 160 171.915 151.794 171.915 141.688 L 171.915 84.312 C 171.915 74.206 180.037 66 190.041 66 Z');
-    var clip = new fabric.Path("m 120.13284,206.74386 c 0.9626,20.16453 -1.83902,39.81626 -15.55368,56.10132 -23.397495,27.78257 -56.863886,37.57688 -97.247659,20.95554 -26.731376,-11.00229 -41.633546,-30.90701 -42.49274,-58.20745 -1.357078,-43.12027 -4.55766,-86.41402 -1.862778,-129.360155 2.954332,-47.080777 21.448192,-89.8916649 60.303789,-122.729712 15.350316,-12.973018 26.901462,-10.752064 41.490897,3.470063 27.876488,27.174673 44.772581,59.793877 53.254831,95.605191 4.57523,19.316248 3.14219,39.848033 3.90351,61.743273 -0.94295,25.41519 -1.36955,48.91858 -1.79617,72.42193 z", {
-        left: 176,
-        top: 40
+    var clip = new fabric.Path("m 123.09916,212.65982 c 0.98065,20.65785 -1.8735,40.79035 -15.84531,57.47384 -23.836198,28.46225 -57.930084,38.49618 -99.0710526,21.4682 -27.2325894,-11.27146 -42.4141744,-31.66314 -43.2894784,-59.63147 -1.382524,-44.17521 -4.643116,-88.52813 -1.897705,-132.524941 3.009725,-48.232602 21.850345,-92.0908513 61.434484,-125.732276 15.638134,-13.290401 27.405864,-11.015111 42.268851,3.554957 28.399172,27.8394977 45.612071,61.256726 54.253361,97.944157 4.66102,19.788818 3.2011,40.822913 3.9767,63.253803 -0.96063,26.03698 -1.39523,50.11538 -1.82985,74.19373 z", {
+        left: 174,
+        top: 36,
+        selectable: false
     });
-    clip.set({ fill: 'blue', fillRule: 'evenodd' })
+    clip.set({ fill: 'beige', fillRule: 'evenodd' })
     canvas.add(clip);
-    // canvas.centerObject(clip);
-    fabric.Image.fromURL('https://cdn.pixabay.com/photo/2015/12/09/01/02/colorful-abstract-background-1084082_640.jpg', function(img) {
-        canvas.add(img);
-        canvas.clipPath = clip;
-    })
+    canvas.clipPath = clip;
     canvas.renderAll();
     fabric.Object.prototype.transparentCorners = false;
 
     var drawingModeEl = $('drawing-mode'),
         drawingOptionsEl = $('drawing-mode-options'),
         drawingColorEl = $('drawing-color'),
-        drawingShadowColorEl = $('drawing-shadow-color'),
+        // drawingShadowColorEl = $('drawing-shadow-color'),
         drawingLineWidthEl = $('drawing-line-width'),
-        drawingShadowWidth = $('drawing-shadow-width'),
-        drawingShadowOffset = $('drawing-shadow-offset'),
+        // drawingShadowWidth = $('drawing-shadow-width'),
+        // drawingShadowOffset = $('drawing-shadow-offset'),
         clearEl = $('clear-canvas');
 
     clearEl.onclick = function() {
         canvas.clear()
+        var clip = new fabric.Path("m 123.09916,212.65982 c 0.98065,20.65785 -1.8735,40.79035 -15.84531,57.47384 -23.836198,28.46225 -57.930084,38.49618 -99.0710526,21.4682 -27.2325894,-11.27146 -42.4141744,-31.66314 -43.2894784,-59.63147 -1.382524,-44.17521 -4.643116,-88.52813 -1.897705,-132.524941 3.009725,-48.232602 21.850345,-92.0908513 61.434484,-125.732276 15.638134,-13.290401 27.405864,-11.015111 42.268851,3.554957 28.399172,27.8394977 45.612071,61.256726 54.253361,97.944157 4.66102,19.788818 3.2011,40.822913 3.9767,63.253803 -0.96063,26.03698 -1.39523,50.11538 -1.82985,74.19373 z", {
+            left: 174,
+            top: 36,
+            selectable: false
+        });
+        clip.set({ fill: 'beige', fillRule: 'evenodd' })
+        canvas.add(clip);
+        canvas.clipPath = clip;
+        canvas.renderAll();
     };
 
     drawingModeEl.onclick = function() {
@@ -45,18 +51,7 @@
         }
     };
 
-    function maskNail() {
-        fabric.loadSVGFromURL('output.svg', function(objects, options) {
-            console.log("red nail");
-            var shape = fabric.util.groupSVGElements(objects, options);
-            canvas.add(shape);
-            canvas.clipTo = function(ctx) {
-                shape.render(ctx);
-            };
-            canvas.setDimensions({ width: shape.width, height: shape.height });
-            canvas.renderAll();
-        });
-    };
+
 
 
     if (fabric.PatternBrush) {
@@ -149,15 +144,15 @@
 
     $('drawing-mode-selector').onchange = function() {
 
-        if (this.value === 'hline') {
+        if (this.value === 'Horizontal Stripes') {
             canvas.freeDrawingBrush = vLinePatternBrush;
-        } else if (this.value === 'vline') {
+        } else if (this.value === 'Vertical Stripes') {
             canvas.freeDrawingBrush = hLinePatternBrush;
-        } else if (this.value === 'square') {
+        } else if (this.value === 'Waffle') {
             canvas.freeDrawingBrush = squarePatternBrush;
-        } else if (this.value === 'diamond') {
+        } else if (this.value === 'Diamonds') {
             canvas.freeDrawingBrush = diamondPatternBrush;
-        } else if (this.value === 'texture') {
+        } else if (this.value === 'Polka Dots') {
             canvas.freeDrawingBrush = texturePatternBrush;
         } else {
             canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
@@ -170,13 +165,13 @@
                 brush.source = brush.getPatternSrc.call(brush);
             }
             brush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-            brush.shadow = new fabric.Shadow({
-                blur: parseInt(drawingShadowWidth.value, 10) || 0,
-                offsetX: 0,
-                offsetY: 0,
-                affectStroke: true,
-                color: drawingShadowColorEl.value,
-            });
+            // brush.shadow = new fabric.Shadow({
+            //     blur: parseInt(drawingShadowWidth.value, 10) || 0,
+            //     offsetX: 0,
+            //     offsetY: 0,
+            //     affectStroke: true,
+            //     color: drawingShadowColorEl.value,
+            // });
         }
     };
 
@@ -188,35 +183,35 @@
             brush.source = brush.getPatternSrc.call(brush);
         }
     };
-    drawingShadowColorEl.onchange = function() {
-        canvas.freeDrawingBrush.shadow.color = this.value;
-    };
+    // drawingShadowColorEl.onchange = function() {
+    //     canvas.freeDrawingBrush.shadow.color = this.value;
+    // };
     drawingLineWidthEl.onchange = function() {
         canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
         this.previousSibling.innerHTML = this.value;
     };
-    drawingShadowWidth.onchange = function() {
-        canvas.freeDrawingBrush.shadow.blur = parseInt(this.value, 10) || 0;
-        this.previousSibling.innerHTML = this.value;
-    };
-    drawingShadowOffset.onchange = function() {
-        canvas.freeDrawingBrush.shadow.offsetX = parseInt(this.value, 10) || 0;
-        canvas.freeDrawingBrush.shadow.offsetY = parseInt(this.value, 10) || 0;
-        this.previousSibling.innerHTML = this.value;
-    };
+    // drawingShadowWidth.onchange = function() {
+    //     canvas.freeDrawingBrush.shadow.blur = parseInt(this.value, 10) || 0;
+    //     this.previousSibling.innerHTML = this.value;
+    // };
+    // drawingShadowOffset.onchange = function() {
+    //     canvas.freeDrawingBrush.shadow.offsetX = parseInt(this.value, 10) || 0;
+    //     canvas.freeDrawingBrush.shadow.offsetY = parseInt(this.value, 10) || 0;
+    //     this.previousSibling.innerHTML = this.value;
+    // };
 
     if (canvas.freeDrawingBrush) {
         canvas.freeDrawingBrush.color = drawingColorEl.value;
         // maskNail();
         // canvas.freeDrawingBrush.source = canvas.freeDrawingBrush.getPatternSrc.call(this);
         canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-        canvas.freeDrawingBrush.shadow = new fabric.Shadow({
-            blur: parseInt(drawingShadowWidth.value, 10) || 0,
-            offsetX: 0,
-            offsetY: 0,
-            affectStroke: true,
-            color: drawingShadowColorEl.value,
-        });
+        // canvas.freeDrawingBrush.shadow = new fabric.Shadow({
+        //     blur: parseInt(drawingShadowWidth.value, 10) || 0,
+        //     offsetX: 0,
+        //     offsetY: 0,
+        //     affectStroke: true,
+        //     color: drawingShadowColorEl.value,
+        // });
     }
     document.getElementById('imgLoader').onchange = function handleImage(e) {
         var reader = new FileReader();
@@ -239,14 +234,6 @@
         }
         reader.readAsDataURL(e.target.files[0]);
     }
-    fabric.loadSVGFromURL('output.svg', function(objects, options) {
-        console.log("red nail");
-        var shape = fabric.util.groupSVGElements(objects, options);
-        canvas.add(shape);
-        canvas.clipTo = function(ctx) {
-            shape.render(ctx);
-        };
-        canvas.renderAll();
-    });
+
 
 })();
