@@ -237,6 +237,104 @@
         }
         reader.readAsDataURL(e.target.files[0]);
     }
+    let lockHistory = false; //Undo/Redo時の描画イベントに反応させないためのフラグ
+    const undo_history = [];
+    const redo_history = [];
+
+    undo_history.push(JSON.stringify(canvas));
+
+    canvas.on("object:added", function() {
+        if (lockHistory) return;
+        console.log("object:added");
+        undo_history.push(JSON.stringify(canvas));
+        redo_history.length = 0;
+        console.log(undo_history.length);
+    });
+
+    canvas.on("object:modified", function() {
+        if (lockHistory) return;
+        console.log("object:modified");
+        undo_history.push(JSON.stringify(canvas));
+        redo_history.length = 0;
+        console.log(undo_history.length);
+    });
+
+    function undo() {
+        if (undo_history.length > 0) {
+            lockHistory = true;
+            if (undo_history.length > 1) redo_history.push(undo_history.pop()); //最初の白紙はredoに入れない
+            const content = undo_history[undo_history.length - 1];
+            canvas.loadFromJSON(content, function() {
+                canvas.renderAll();
+                lockHistory = false;
+            });
+        }
+    }
+
+    function redo() {
+        if (redo_history.length > 0) {
+            lockHistory = true;
+            const content = redo_history.pop();
+            undo_history.push(content);
+            canvas.loadFromJSON(content, function() {
+                canvas.renderAll();
+                lockHistory = false;
+            });
+        }
+    }
+
+    document.getElementById("undo").addEventListener("click", undo);
+    document.getElementById("redo").addEventListener("click", redo);
+
+    //編集モードボタンの処理
+    document.getElementById("editMode").addEventListener("mouseup", function(e) {
+        if (canvas.isDrawingMode) {
+            canvas.isDrawingMode = false;
+            // clearSelectedButton();
+            this.classList.add("selected"); //選択されたボタンはボーダーを太くする
+        } else {
+            canvas.isDrawingMode = true;
+            // clearSelectedButton();
+            // lastSelectdColorBtn.classList.add("selected");
+            this.classList.remove("selected"); //選択されたボタンはボーダーを太くする
+            canvas.discardActiveObject();
+            canvas.requestRenderAll();
+        }
+    });
+
+    //deleteボタンの処理
+    const deleteBtn = document.getElementById("delete");
+
+    canvas.on("selection:created", function() {
+        deleteBtn.removeAttribute("disabled");
+    });
+
+    canvas.on("selection:cleared", function() {
+        deleteBtn.setAttribute("disabled", true);
+    });
+
+    deleteBtn.addEventListener("click", function() {
+        deleteSelectedObjects();
+    });
+
+    function deleteSelectedObjects() {
+        lockHistory = true;
+        canvas.getActiveObjects().forEach((element) => {
+            canvas.remove(element);
+        });
+        canvas.discardActiveObject();
+        canvas.requestRenderAll();
+        undo_history.push(JSON.stringify(canvas)); //UNDO処理
+        lockHistory = false;
+    }
+
+    //Deteleキーの処理
+    document.addEventListener("keyup", function(e) {
+        console.log(e.keyCode);
+        if ((e.keyCode == 8) | (e.keyCode == 46)) {
+            deleteSelectedObjects();
+        }
+    });
 
 
 })();

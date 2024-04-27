@@ -13,49 +13,45 @@
             <div class="canvas-container">
                 <canvas id="canvas" height="512" width="512"></canvas><br />
             </div>
-            <div style="display: inline-block; margin-left: 10px; width: 500px">
-                <button id="drawing-mode" class="btn btn-info">Cancel drawing mode</button><br>
-                <button id="clear-canvas" class="btn btn-info">Clear</button><br>
+            <div id="drawing-controls">
+                <button id="drawing-mode" class="btn btn-info">Enter Select Mode</button><br>
+                <button id="clear-canvas" class="btn btn-info">Clear Canvas</button><br>
+                <div class="undo-redo-buttons">
+                    <button id="undo" class="btn btn-info">Undo</button>
+                    <button id="redo" class="btn btn-info">Redo</button> </div><br>
 
                 <div id="drawing-mode-options" style="">
                     <label for="drawing-mode-selector">Mode:</label>
                     <select id="drawing-mode-selector">
-                    <option>Pen</option>
-                    <option>Paint</option>
-                    <option>Spray</option>
-                    <!-- <option>Pattern</option> -->
-            
-                    <option>Horizontal Stripes</option>
-                    <option>Vertical Stripes</option>
-                    <option>Waffle</option>
-                    <option>Diamonds</option>
-                    <option>Polka Dots</option>
-                </select><br>
+                        <!-- <option>Pen</option> -->
+                        <option>Brush</option>
+                        <option>Spray</option>
+                        <!-- <option>Pattern</option> -->
+                        
+                        <option>Horizontal Stripes</option>
+                        <option>Vertical Stripes</option>
+                        <option>Waffle</option>
+                        <option>Diamonds</option>
+                        <option>Polka Dots</option>
+                    </select><br>
 
                     <label for="drawing-line-width">Width:</label>
                     <span class="info">0</span><input type="range" value="0" min="0" max="150" id="drawing-line-width"><br>
 
                     <label for="drawing-color">Color:</label>
                     <input type="color" value="#005E7A" id="drawing-color"><br>
-
-                    <!-- <label for="drawing-shadow-color">Shadow color:</label>
-                    <input type="color" value="#005E7A" id="drawing-shadow-color"><br>
-
-                    <label for="drawing-shadow-width">Shadow width:</label>
-                    <span class="info">0</span><input type="range" value="0" min="0" max="50" id="drawing-shadow-width"><br>
-
-                    <label for="drawing-shadow-offset">Shadow offset:</label>
-                    <span class="info">0</span><input type="range" value="0" min="0" max="50" id="drawing-shadow-offset"><br> -->
                 </div>
+                <p>Upload stickers (images with transparent backgrounds) to add to nails. Images should be 100px x 100px</p>
+                <input type="file" id="imgLoader" accept="image/*">
+
             </div>
-            <p>Upload files to add to nails. Images with transparent backgrounds will appear as stickers.</p>
-            <input type="file" id="imgLoader" accept="image/*">
 
         </div>
     </div>
 
     <script type="text/javascript" src="./fabric.min.js"></script>
     <script type="text/javascript" src="./script.js"></script>
+
 </body>
 
 </html>

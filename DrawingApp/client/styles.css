@@ -41,6 +41,14 @@ h1 {
     transform: translate(-50%, -50%);
 }
 
+#drawing-controls {
+    position: absolute;
+    top: 0;
+    left: -400px;
+    width: 280px;
+    /* Adjust the left position as needed */
+}
+
 .canvas-container {
     margin-bottom: 10px;
 }
@@ -66,6 +74,16 @@ canvas {
 
 .btn:hover {
     background-color: #0056b3;
+}
+
+.undo-redo-buttons {
+    display: flex;
+    /* Use flexbox to position buttons */
+}
+
+.undo-redo-buttons button {
+    margin-right: 10px;
+    /* Add margin between buttons */
 }
 
 .info {
