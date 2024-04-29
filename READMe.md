@@ -18,12 +18,10 @@ The default mode is drawing mode.
 In drawing mode you can:
 - Use Clear Canvas button to return to a blank nail
 - Use the Undo button to undo the last action done
-- Use the Redo button to redo the last action undone
-
+- Use the Redo button to redo the last action undone\\
 - Choose a brush using the mode dropdown
 - Change the width of your brush using the slider
-- Change the color of your paint using the color picker
-
+- Change the color of your paint using the color picker\\
 - Upload images to design your nails
 
 In select mode you can:
