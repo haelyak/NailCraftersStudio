@@ -3,7 +3,7 @@
 
 Follow the steps below to run the app:
 
-1. Clone the repository
+1. Clone the repository https://github.com/haelyak/NailCraftersStudio.git
 2. Download Node.js https://nodejs.org/en/download
 3. Install Fabric.js using 
 ```$ npm install fabric --save```
