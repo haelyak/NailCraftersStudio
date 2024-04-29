@@ -282,7 +282,20 @@
             });
         }
     }
+    // deleting objects
+    var deleteEl = function() {
+        var activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            canvas.remove(activeObject);
+            canvas.renderAll();
+        }
+    };
 
+    // assigns the deleteEl function to the button
+    var deleteObjectEl = $('delete-object');
+    if (deleteObjectEl) {
+        deleteObjectEl.onclick = deleteEl;
+    }
     document.getElementById("undo").addEventListener("click", undo);
     document.getElementById("redo").addEventListener("click", redo);
 
