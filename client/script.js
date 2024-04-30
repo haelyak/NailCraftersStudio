@@ -43,11 +43,14 @@
         canvas.renderAll();
     };
 
+
+
     drawingModeEl.onclick = function() {
         canvas.isDrawingMode = !canvas.isDrawingMode;
         if (canvas.isDrawingMode) {
             drawingModeEl.innerHTML = 'Cancel drawing mode';
             drawingOptionsEl.style.display = '';
+            setDefaultFreeDrawingBrush(); // Set default brush when entering drawing mode
         } else {
             drawingModeEl.innerHTML = 'Enter drawing mode';
             drawingOptionsEl.style.display = 'none';
@@ -56,8 +59,12 @@
 
     };
 
-
-
+    // Function to set the default free drawing brush
+    function setDefaultFreeDrawingBrush() {
+        canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+        canvas.freeDrawingBrush.color = drawingColorEl.value;
+        canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+    }
 
     if (fabric.PatternBrush) {
         var vLinePatternBrush = new fabric.PatternBrush(canvas);
@@ -142,21 +149,23 @@
     }
 
     $('drawing-mode-selector').onchange = function() {
-
-        if (this.value === 'Horizontal Stripes') {
-            canvas.freeDrawingBrush = vLinePatternBrush;
-        } else if (this.value === 'Vertical Stripes') {
-            canvas.freeDrawingBrush = hLinePatternBrush;
-        } else if (this.value === 'Waffle') {
-            canvas.freeDrawingBrush = squarePatternBrush;
-        } else if (this.value === 'Diamonds') {
-            canvas.freeDrawingBrush = diamondPatternBrush;
-        } else if (this.value === 'Polka Dots') {
-            canvas.freeDrawingBrush = texturePatternBrush;
-        } else {
-            canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
+        if (this.value === 'Brush') { // If normal brush is selected
+            setDefaultFreeDrawingBrush(); // Set default free drawing brush
+        } else { // If pattern brush is selected
+            if (this.value === 'Horizontal Stripes') {
+                canvas.freeDrawingBrush = vLinePatternBrush;
+            } else if (this.value === 'Vertical Stripes') {
+                canvas.freeDrawingBrush = hLinePatternBrush;
+            } else if (this.value === 'Waffle') {
+                canvas.freeDrawingBrush = squarePatternBrush;
+            } else if (this.value === 'Diamonds') {
+                canvas.freeDrawingBrush = diamondPatternBrush;
+            } else if (this.value === 'Polka Dots') {
+                canvas.freeDrawingBrush = texturePatternBrush;
+            } else {
+                canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
+            }
         }
-
         if (canvas.freeDrawingBrush) {
             var brush = canvas.freeDrawingBrush;
             brush.color = drawingColorEl.value;
