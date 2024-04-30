@@ -9,7 +9,7 @@
 
 .canvas-container {
     width: 200px;
-    height: 400px;
+    height: 500px;
     position: relative;
     user-select: none;
 }
@@ -23,9 +23,7 @@
 
 #canvas {
     position: absolute;
-    width: 150px;
-    height: 400px;
-    left: 0px;
+    left: 200px;
     top: 0px;
     user-select: none;
     cursor: default;
